@@ -97,21 +97,20 @@ def register_feed():
             break
         else:
             # cv2.imshow("test", frame)
+            img_saved = cv2.imwrite(f"UserImage\image{img_counter}.jpeg", frame)
 
-            k = cv2.waitKey(1)
-            if k%256 == 27:
-                # ESC pressed
-                print("Escape hit, closing...")
-                break
-            elif k%256 == 32:
-                # SPACE pressed
-                # img_name = "opencv_frame_{}.png".format(img_counter)
-                cv2.imwrite(name + ".jpg", frame)
-                # print("{} written!".format(img_name))
-                print("Image Captured! Proceed...")
+            if img_saved:
+                imageSmall = cv2.resize(frame,(0,0),None,0.25,0.25)
+                imageSmall = cv2.cvtColor(imageSmall,cv2.COLOR_BGR2RGB)
+                facesCurrFrames = face_recognition.face_locations(imageSmall)
+                encodeCurrFrame = face_recognition.face_encodings(imageSmall,facesCurrFrames)
+                for encodeFace, faceLocation in zip(encodeCurrFrame,facesCurrFrames):
+                    y1,x2,y2,x1 = faceLocation
+                    y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
+                    cv2.putText(frame,"Your image saved",(x1+6,y2-6),cv2.FONT_HERSHEY_COMPLEX,1,(255,255,255),2) 
                 img_counter += 1
 
-            
+            cam.release()
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield(b'--frame\r\n'
