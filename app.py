@@ -108,7 +108,7 @@ def register_feed():
                     y1,x2,y2,x1 = faceLocation
                     y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
                     cv2.putText(frame,"Your image saved",(x1+6,y2-6),cv2.FONT_HERSHEY_COMPLEX,1,(255,255,255),2) 
-                img_counter += 1
+            img_counter += 1
 
             cam.release()
             ret, buffer = cv2.imencode('.jpg', frame)
