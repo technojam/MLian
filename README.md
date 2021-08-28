@@ -30,8 +30,8 @@ __________________________
     `flask run`
 
 - When you run `flask run` on the terminal, a local host link should appear. Open this link in your browser to view the project.
-<br>
+
 - Ensure you have installed Desktop developement with C++ componenets using Visual Studio Installer and CMake to install dlib and face_recognition.
 
-## Demo: 
+## Demo:
 
