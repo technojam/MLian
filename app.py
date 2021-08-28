@@ -84,7 +84,7 @@ def register_feed():
     import cv2
     path = '/UserImage'
     cam = cv2.VideoCapture(0)
-    name=input("Name: ")
+    # name=input("Name: ")
 
     # cv2.namedWindow("test")
 
