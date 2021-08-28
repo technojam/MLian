@@ -35,7 +35,7 @@ def gen_frames():
     encodeListKnown = findEncodings(images)
     # print('Encoding Complete')
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(-1)
     # def gen_frames():
     while True:
         success, img = cap.read()
@@ -83,7 +83,7 @@ def register_feed():
     import os
     import cv2
     path = '/UserImage'
-    cam = cv2.VideoCapture(0)
+    cam = cv2.VideoCapture(-1)
     # name=input("Name: ")
 
     # cv2.namedWindow("test")
