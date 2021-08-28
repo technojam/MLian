@@ -1,38 +1,42 @@
-from flask import Flask, render_template, request, Response
+from flask import *
 import requests
 from flask import redirect, url_for
 import cv2
 import numpy as np
 import face_recognition
 import os
+# from main.py import register_feed()
 
 app = Flask(__name__)
 
-path = 'UserImage'
-images = []
-classNames = []
-myList = os.listdir(path) 
-
-# print(myList)
-for cls in myList:
-    curImg = cv2.imread(f'{path}/{cls}')
-    images.append(curImg)
-    classNames.append(os.path.splitext(cls)[0])
-# print(classNames)
-
-def findEncodings(images):
-    encodeList = []
-    for img in images:
-        img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-        encode = face_recognition.face_encodings(img)[0]
-        encodeList.append(encode)
-    return encodeList 
-
-encodeListKnown = findEncodings(images)
-# print('Encoding Complete')
-
-cap = cv2.VideoCapture(0)
+#################################START######################################################
+#Login page code
 def gen_frames():
+    path = 'UserImage'
+    images = []
+    classNames = []
+    myList = os.listdir(path) 
+
+    # print(myList)
+    for cls in myList:
+        curImg = cv2.imread(f'{path}/{cls}')
+        images.append(curImg)
+        classNames.append(os.path.splitext(cls)[0])
+    # print(classNames)
+
+    def findEncodings(images):
+        encodeList = []
+        for img in images:
+            img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+            encode = face_recognition.face_encodings(img)[0]
+            encodeList.append(encode)
+        return encodeList 
+
+    encodeListKnown = findEncodings(images)
+    # print('Encoding Complete')
+
+    cap = cv2.VideoCapture(0)
+    # def gen_frames():
     while True:
         success, img = cap.read()
         if not success:
@@ -55,18 +59,75 @@ def gen_frames():
                     cv2.rectangle(img,(x1,y1),(x2,y2),(0,255,0),2)
                     cv2.rectangle(img,(x1,y2-35),(x2,y2),(0,255,0),cv2.FILLED)
                     cv2.putText(img,"profile Matched",(x1+6,y2-6),cv2.FONT_HERSHEY_COMPLEX,1,(255,255,255),2)
+                    case:ProfileMatched
                 else:
                     y1,x2,y2,x1 = faceLocation
                     y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
                     cv2.rectangle(img,(x1,y1),(x2,y2),(0,255,0),2)
                     cv2.rectangle(img,(x1,y2-35),(x2,y2),(0,255,0),cv2.FILLED)
                     cv2.putText(img,"profile Not Matched",(x1+6,y2-6),cv2.FONT_HERSHEY_COMPLEX,1,(255,255,255),2)
+                    case:ProfileNotMatched
                     
             ret, buffer = cv2.imencode('.jpg', img)
             img = buffer.tobytes()
             yield(b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + img + 
                     b'\r\n')
+
+#####################################END######################################
+
+#################################START######################################################
+#Register page code
+
+def register_feed():
+    import os
+    import cv2
+    path = '/UserImage'
+    cam = cv2.VideoCapture(0)
+    name=input("Name: ")
+
+    # cv2.namedWindow("test")
+
+    img_counter = 0
+
+    while True:
+        ret, frame = cam.read()
+        if not ret:
+            print("failed to grab frame")
+            break
+        else:
+            # cv2.imshow("test", frame)
+
+            k = cv2.waitKey(1)
+            if k%256 == 27:
+                # ESC pressed
+                print("Escape hit, closing...")
+                break
+            elif k%256 == 32:
+                # SPACE pressed
+                # img_name = "opencv_frame_{}.png".format(img_counter)
+                cv2.imwrite(name + ".jpg", frame)
+                # print("{} written!".format(img_name))
+                print("Image Captured! Proceed...")
+                img_counter += 1
+
+            
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield(b'--frame\r\n'
+                b'Content-Type: image/jpeg\r\n\r\n' + frame + 
+                b'\r\n')
+
+    # cam.release()
+
+    # cv2.destroyAllWindows()
+
+
+#####################################END######################################
+
+
+
+
 
 @app.route('/')
 def index():
@@ -80,9 +141,13 @@ def home():
 def login():
     return render_template('login.html')
 
-@app.route('/video_feed')
-def video_feed():
+@app.route('/login_cam')
+def login_cam():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/register_cam')
+def register_cam():
+    return Response(register_feed(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/register.html')
 def register():

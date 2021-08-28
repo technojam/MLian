@@ -14,20 +14,28 @@
           <p>Please fill in this form to create an account.</p>
           <hr>
       
-          <label for="email"><b>Email</b></label>
-          <input type="text" placeholder="Enter Email" name="email" id="email" required>
+          <label for="name"><b>Name</b></label>
+          <input type="text" placeholder="Enter Name" name="name" id="name" required>
       
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+          <label for="aadhaar"><b>Aadhaar Number</b></label>
+          <input type="number" placeholder="Enter Aadhaar Number" name="aadhaar" id="aadhaar" required>
       
-          <label for="psw-repeat"><b>Repeat Password</b></label>
-          <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+          <label for="yob"><b>Year of Birth</b></label>
+          <input type="month" placeholder="Enter Year of Birth" name="yob" id="yob" required>
           <hr>
+
+            <div class="container">
+              <div class="row">
+                  <div class="col-lg-8  offset-lg-2">
+                      <img src="{{ url_for('register_cam') }}" width="100%">
+                  </div>
+              </div>
+          </div>
           <button type="submit" class="registerbtn">Register</button>
         </div>
       
         <div class="container signin">
-          <p>Already have an account? <a href="#">Sign in</a>.</p>
+          <p>Already have an account? <a href="login.html">Sign in</a>.</p>
         </div>
       </form>
 </body>
