@@ -33,5 +33,4 @@ __________________________
 
 - Ensure you have installed Desktop developement with C++ componenets using Visual Studio Installer and CMake to install dlib and face_recognition.
 
-## Demo: https://mlian.herokuapp.com/
 
