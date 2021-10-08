@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>image capturing using js</title>
+</head>
+<style>
+    #camera{
+        width: 350px;
+        height: 350px;
+        border: 1px solid black;
+    }
+</style>
+<body>
+    <div id="camera">
+    </div>
+    <button onclick="take_image()">Take Image </button>
+    <div id="results"></div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.26/webcam.min.js"></script>
+<script>
+
+    Webcam.set({
+        width: 350,
+        height: 350,
+        image_format:"jpeg",
+        jpeg_quality: 90
+    }) 
+    Webcam.attach("#camera")
+    function take_image(){
+        Webcam.snap(function(data_uri){
+            document.getElementById('results').innerHTML =  '<img id="imageprev" src="'+data_uri+'"/>';
+        });
+    }
+</script>
+
+</html>
+
